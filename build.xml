@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <project name="elgg" default="package" basedir=".">
 
-	<property name="version" value="1.5" />
+	<property name="version" value="1.5rc2" />
 
 
 	<property name="checkout_core" value="__core" />
