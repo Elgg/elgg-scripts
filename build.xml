@@ -72,8 +72,8 @@
 	</target>
 	
 	<target name="nightly" depends="init, export, copycore, copyfull">
-		<zip destfile="${output}/elgg${DSTAMP}core.zip" basedir="${files_core}" level="9"/>
-		<zip destfile="${output}/elgg${DSTAMP}.zip" basedir="${files_full}" level="9"/>
+		<zip destfile="${output}/elgg${DSTAMP}core.zip" basedir="${files_core}" />
+		<zip destfile="${output}/elgg${DSTAMP}.zip" basedir="${files_full}" />
 
 		<tar destfile="${output}/elgg${DSTAMP}core.tar.gz" basedir="${files_core}" compression="gzip"/>
 		<tar destfile="${output}/elgg${DSTAMP}.tar.gz" basedir="${files_full}" compression="gzip"/>
