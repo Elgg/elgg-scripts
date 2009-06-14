@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <project name="elgg" default="package" basedir=".">
 
-	<property name="version" value="1.5rc2" />
+	<property name="version" value="" />
 
 
 	<property name="checkout_core" value="__core" />
@@ -66,9 +66,7 @@
 		<zip destfile="${output}/elgg${version}.zip" basedir="${files_full}" level="9"/>
 
 		<tar destfile="${output}/elgg${version}core.tar.gz" basedir="${files_core}" compression="gzip"/>
-		<!-- <gzip destfile="${output}/elgg${version}core.tar.gz" src="${output}/elgg${version}core.tar"/> -->
 		<tar destfile="${output}/elgg${version}.tar.gz" basedir="${files_full}" compression="gzip"/>
-		<!-- <gzip destfile="${output}/elgg${version}.tar.gz" src="${output}/elgg${version}.tar"/> -->
 	</target>
 	
 	<target name="nightly" depends="init, export, copycore, copyfull">
