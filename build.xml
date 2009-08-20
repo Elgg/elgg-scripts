@@ -1,8 +1,7 @@
 <?xml version="1.0"?>
 <project name="elgg" default="package" basedir=".">
 
-	<property name="version" value="" />
-
+	<property name="version" value="1.6" />
 
 	<property name="checkout_core" value="__core" />
 	<property name="checkout_ext" value="__ext" />
@@ -31,14 +30,25 @@
    			<arg value="${checkout_core}"/>
   		</exec>
 
+		<exec executable="svn2cl" dir="${checkout_core}">
+			<arg value="--group-by-day"/>
+			<arg value="https://code.elgg.org/elgg/trunk/"/>
+		</exec>
+
+
 		<exec executable="svn">
    			<arg value="export"/>
-   			<arg value="https://code.elgg.org/extensions/plugins"/>
+   			<arg value="https://code.elgg.org/extensions/plugins/"/>
    			<arg value="${checkout_ext}"/>
   		</exec>
+
+		<exec executable="svn2cl" dir="${checkout_ext}">
+			<arg value="--group-by-day"/>
+			<arg value="https://code.elgg.org/extensions/plugins/"/>
+		</exec>
+
 	</target>
 
-	
 	<target name="copycore">
 		<copy todir="${files_core}/elgg${version}core">
 			<fileset dir="${checkout_core}" />
