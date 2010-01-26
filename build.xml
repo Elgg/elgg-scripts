@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <project name="elgg" default="package" basedir=".">
 
-	<property name="version" value="1.6" />
+	<property environment="env"/>
+	<property name="version" value="${env.ELGG_VERSION}" />
 
 	<property name="checkout_core" value="__core" />
 	<property name="checkout_ext" value="__ext" />
@@ -26,64 +27,64 @@
 
 		<exec executable="svn">
    			<arg value="export"/>
-   			<arg value="https://code.elgg.org/elgg/trunk/"/>
+   			<arg value="http://code.elgg.org/elgg/trunk/"/>
    			<arg value="${checkout_core}"/>
   		</exec>
 
 		<exec executable="svn2cl" dir="${checkout_core}">
 			<arg value="--group-by-day"/>
-			<arg value="https://code.elgg.org/elgg/trunk/"/>
+			<arg value="http://code.elgg.org/elgg/trunk/"/>
 		</exec>
 
 
 		<exec executable="svn">
    			<arg value="export"/>
-   			<arg value="https://code.elgg.org/extensions/plugins/"/>
+   			<arg value="http://code.elgg.org/extensions/plugins/"/>
    			<arg value="${checkout_ext}"/>
   		</exec>
 
 		<exec executable="svn2cl" dir="${checkout_ext}">
 			<arg value="--group-by-day"/>
-			<arg value="https://code.elgg.org/extensions/plugins/"/>
+			<arg value="http://code.elgg.org/extensions/plugins/"/>
 		</exec>
 
 	</target>
 
 	<target name="copycore">
-		<copy todir="${files_core}/elgg${version}core">
+		<copy todir="${files_core}/elgg-${version}-core">
 			<fileset dir="${checkout_core}" />
 		</copy>
 
-		<copy todir="${files_core}/elgg${version}core/mod/">
+		<copy todir="${files_core}/elgg-${version}-core/mod/">
 			<fileset dir="${checkout_core}/mod/" includesfile="packages.core"/>
 		</copy>
 
 	</target>
 
 	<target name="copyfull">
-		<copy todir="${files_full}/elgg${version}">
+		<copy todir="${files_full}/elgg$-{version}">
 			<fileset dir="${checkout_core}" />
 		</copy>
 
-		<copy todir="${files_full}/elgg${version}/mod/">
+		<copy todir="${files_full}/elgg-${version}/mod/">
 			<fileset dir="${checkout_ext}" includesfile="packages.full"/>
 		</copy>
 	</target>
 		
 
 	<target name="package" depends="init, export, copycore, copyfull">
- 		<zip destfile="${output}/elgg${version}core.zip" basedir="${files_core}" level="9"/>
-		<zip destfile="${output}/elgg${version}.zip" basedir="${files_full}" level="9"/>
+ 		<zip destfile="${output}/elgg-${version}-core.zip" basedir="${files_core}" level="9"/>
+		<zip destfile="${output}/elgg-${version}.zip" basedir="${files_full}" level="9"/>
 
-		<tar destfile="${output}/elgg${version}core.tar.gz" basedir="${files_core}" compression="gzip"/>
-		<tar destfile="${output}/elgg${version}.tar.gz" basedir="${files_full}" compression="gzip"/>
+		<tar destfile="${output}/elgg-${version}-core.tar.gz" basedir="${files_core}" compression="gzip"/>
+		<tar destfile="${output}/elgg-${version}.tar.gz" basedir="${files_full}" compression="gzip"/>
 	</target>
 	
 	<target name="nightly" depends="init, export, copycore, copyfull">
-		<zip destfile="${output}/elgg${DSTAMP}core.zip" basedir="${files_core}" />
-		<zip destfile="${output}/elgg${DSTAMP}.zip" basedir="${files_full}" />
+		<zip destfile="${output}/elgg-${DSTAMP}-core.zip" basedir="${files_core}" />
+		<zip destfile="${output}/elgg-${DSTAMP}.zip" basedir="${files_full}" />
 
-		<tar destfile="${output}/elgg${DSTAMP}core.tar.gz" basedir="${files_core}" compression="gzip"/>
-		<tar destfile="${output}/elgg${DSTAMP}.tar.gz" basedir="${files_full}" compression="gzip"/>
+		<tar destfile="${output}/elgg-${DSTAMP}-core.tar.gz" basedir="${files_core}" compression="gzip"/>
+		<tar destfile="${output}/elgg-${DSTAMP}.tar.gz" basedir="${files_full}" compression="gzip"/>
 	</target>
 </project>
