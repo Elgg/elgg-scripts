@@ -62,7 +62,7 @@
 	</target>
 
 	<target name="copyfull">
-		<copy todir="${files_full}/elgg$-{version}">
+		<copy todir="${files_full}/elgg-${version}">
 			<fileset dir="${checkout_core}" />
 		</copy>
 
