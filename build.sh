@@ -92,7 +92,7 @@ prep_svn() {
 }
 
 make_archives() {
-	make_tar_archive
+	#make_tar_archive
 	make_zip_archive
 }
 
