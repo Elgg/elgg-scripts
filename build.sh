@@ -1,15 +1,18 @@
 #!/bin/bash
 
 # takes a target and version number
-SVN_BASE_URL="http://code.elgg.org/"
-OUTPUT_DIR="./"
+GIT_REPO_URL="git://github.com/Elgg/Elgg.git"
 TMP_DIR="/tmp/"
-SVN_EXEC=$(which svn)
+GIT_EXEC=$(which git)
 ZIP_EXEC=$(which zip)
 TAR_EXEC=$(which tar)
-SVN2CL_EXEC=$(which svn2cl)
+
+PWD=$(pwd)
+OUTPUT_DIR="${PWD}/"
+GIT2CL_EXEC="${PWD}/gitlog2changelog.py"
 
 VERBOSE=1
+
 
 #############
 # FUNCTIONS #
@@ -22,7 +25,7 @@ init() {
 		exit 1
 	fi
 
-	SVN_URL="${SVN_BASE_URL}${1}"
+	BRANCH=${1}
 	RELEASE=${2}
 
 	# get output and tmp dirs
@@ -47,8 +50,8 @@ init() {
 		exit 1
 	fi
 
-	if [ "${SVN_EXEC}" = "" ]; then
-		echo "Could not find an SVN executable in the path!"
+	if [ "${GIT_EXEC}" = "" ]; then
+		echo "Could not find an GIT executable in the path!"
 		exit 1
 	fi
 
@@ -65,30 +68,46 @@ init() {
 	DATE=$(date +%s)
 	BASE_NAME="elgg-${RELEASE}"
 	TMP_DIR="${TMP_DIR}${DATE}/"
-	SVN_EXPORT_PATH="${TMP_DIR}${BASE_NAME}"
+	GIT_CLONE_PATH="${TMP_DIR}${BASE_NAME}"
 }
 
 cleanup() {
 	run_cmd "rm -rf ${TMP_DIR}"
 }
 
-prep_svn() {
-	msg "Exporting SVN..."
-	run_cmd "${SVN_EXEC} export ${SVN_URL} ${SVN_EXPORT_PATH}"
+prep_git() {
+	msg "Cloning ${GIT_REPO_URL}..."
+	run_cmd "${GIT_EXEC} clone ${GIT_REPO_URL} ${GIT_CLONE_PATH}"
 
 	if [ $? -gt 0 ]; then
-		echo "Could export ${SVN_URL} to ${SVN_EXPORT_PATH}!"
+		echo "Could not clone ${GIT_REPO_URL} to ${GIT_CLONE_PATH}!"
 		echo "Check that the target exists and try again."
 		exit 1
 	fi
-
-	run_cmd "${SVN2CL_EXEC} --group-by-day -o ${SVN_EXPORT_PATH}/ChangeLog ${SVN_URL}"
+	
+	# checkout the right branch
+	run_cmd "cd ${GIT_CLONE_PATH} && git checkout ${BRANCH}"
+	if [ $? -gt 0 ]; then
+		echo "Could not check out branch ${BRANCH}"
+		echo "Check that the branch / tag is valid and try again."
+		exit 1
+	fi
+	
+	run_cmd ${GIT2CL_EXEC}
 
 	if [ $? -gt 0 ]; then
-		echo "Could export generate ChangeLog for ${SVN_EXPORT_PATH}!"
+		echo "Could not generate ChangeLog for ${GIT_CLONE_PATH}!"
 		echo "Check that the target exists and try again."
 		exit 1
 	fi
+	
+	# don't package the .git dir
+	run_cmd "rm -rf ${GIT_CLONE_PATH}/.git*"
+	
+	if [ $? -gt 0 ]; then
+		echo "Could not remove the .git files!"
+		exit 1
+	fi	
 }
 
 make_archives() {
@@ -116,6 +135,13 @@ make_zip_archive() {
 	run_cmd "cp ${TMP_DIR}${NAME} ${OUTPUT_DIR}"
 }
 
+fix_perms() {
+	run_cmd "cd ${TMP_DIR}"
+	run_cmd "find ./ -type f -exec chmod 644 {} +"
+	run_cmd "find ./ -type d -exec chmod 755 {} +"
+	run_cmd "cd -"
+}
+
 run_cmd() {
 	if [ ${#} -gt 0 ]; then
 		msg "${1}" 2
@@ -133,17 +159,17 @@ run_cmd() {
 
 # Show how to use this script
 usage() {
-	echo "Usage: ${0} target_name version [output_dir = './' [temp_dir = '/tmp']]"
+	echo "Usage: ${0} <identifier> <version> [output_dir = './' [temp_dir = '/tmp']]"
 	echo ""
-	echo "Where target_name is the path of the SVN dir to export and"
-	echo "version is the version name for the archive."
+	echo "Where <identifier> is the path of the GIT dir to export and"
+	echo "<version> is the version name for the archive."
 	echo ""
-	echo "Generates output_dir/elgg-version.tar.gz and output_dir/elgg-version.zip"
+	echo "Generates output_dir/elgg-version.zip"
 	echo ""
 	echo "Examples:"
-	echo "${0} elgg/trunk trunk-nightly"
-	echo "${0} elgg/branches/1.7 1.7-nightly"
-	echo "${0} elgg/tags/1.7 1.7 /var/www/downloads/releases/"
+	echo "${0} master trunk-nightly"
+	echo "${0} 1.7 1.7-nightly"
+	echo "${0} 1.7.0 1.7.0 /var/www/downloads/releases/"
 
 	if [ ${#} -gt 0 ]; then
 		echo ""
@@ -169,7 +195,9 @@ msg() {
 
 init $@
 
-prep_svn
+prep_git
+
+fix_perms
 
 make_archives
 
