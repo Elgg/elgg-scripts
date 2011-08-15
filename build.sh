@@ -7,9 +7,12 @@ GIT_EXEC=$(which git)
 ZIP_EXEC=$(which zip)
 TAR_EXEC=$(which tar)
 
-PWD=$(pwd)
+PWD=`pwd`
 OUTPUT_DIR="${PWD}/"
-GIT2CL_EXEC="${PWD}/gitlog2changelog.py"
+
+# erm...http://stackoverflow.com/questions/59895/can-a-bash-script-tell-what-directory-its-stored-in
+EXEC_DIR="$( cd "$( dirname "$0" )" && pwd )"
+GIT2CL_EXEC="${EXEC_DIR}/gitlog2changelog.py"
 
 VERBOSE=1
 
@@ -93,7 +96,8 @@ prep_git() {
 		exit 1
 	fi
 	
-	run_cmd ${GIT2CL_EXEC}
+	#run_cmd ${GIT2CL_EXEC}
+	${GIT2CL_EXEC}
 
 	if [ $? -gt 0 ]; then
 		echo "Could not generate ChangeLog for ${GIT_CLONE_PATH}!"
