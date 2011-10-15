@@ -1,8 +1,10 @@
 Scripts for managing the Elgg project
 
-==build==
+build
+=====
 Scripts for building the an archive for distrubtion
 
-==reference==
+reference
+=========
 Scripts for creating documentation references
 
