@@ -89,20 +89,15 @@ prep_git() {
 	fi
 	
 	# checkout the right branch
-	run_cmd "cd ${GIT_CLONE_PATH}"
-	if [ $? -gt 0 ]; then
-		echo "Could not change to ${GIT_CLONE_PATH}"
-		exit 1
-	fi
-
-	run_cmd "git checkout ${BRANCH}"
+	run_cmd "cd ${GIT_CLONE_PATH} && git checkout ${BRANCH}"
 	if [ $? -gt 0 ]; then
 		echo "Could not check out branch ${BRANCH}"
 		echo "Check that the branch / tag is valid and try again."
 		exit 1
 	fi
 	
-	run_cmd ${GIT2CL_EXEC}
+	#run_cmd ${GIT2CL_EXEC}
+	${GIT2CL_EXEC}
 
 	if [ $? -gt 0 ]; then
 		echo "Could not generate ChangeLog for ${GIT_CLONE_PATH}!"
