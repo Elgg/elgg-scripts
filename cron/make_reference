@@ -40,6 +40,8 @@ git checkout 1.7
 ( cat ${REFERENCE_CONF_FILE};
 	echo "PROJECT_NUMBER=\"Version 1.7\"";
 	echo "OUTPUT_DIRECTORY=${TMP_DIR}";
+	echo "INPUT=${GIT_CLONE_PATH}";
+	echo "STRIP_FROM_PATH=${GIT_CLONE_PATH}"
 ) | doxygen -
 
 if [ -d ${DOCS_DIR} ]; then
@@ -67,6 +69,8 @@ for BRANCH in ${ELGG_BRANCHES}; do
 	( cat ${REFERENCE_CONF_FILE};
 		echo "PROJECT_NUMBER=\"Version ${BRANCH}\"";
 		echo "OUTPUT_DIRECTORY=${TMP_DIR}";
+		echo "INPUT=${GIT_CLONE_PATH}";
+		echo "STRIP_FROM_PATH=${GIT_CLONE_PATH}"
 	) | doxygen -
 
 	if [ -d ${DOCS_DIR} ]; then
