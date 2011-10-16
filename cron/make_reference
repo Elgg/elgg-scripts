@@ -6,7 +6,7 @@ REFERENCE_CONF_FILE='/root/elgg-scripts/build/build.sh'
 
 GIT_REPO_URL="git://github.com/Elgg/Elgg.git"
 GIT_EXEC=$(which git)
-GIT_CLONE_PATH='/root/code/'
+GIT_CLONE_PATH='/root/Elgg/'
 
 
 ###################################
