@@ -2,11 +2,11 @@
 # build API reference docs from source
 
 REFERENCE_OUTPUT_DIR='/var/www/reference.elgg.org/'
-REFERENCE_CONF_FILE='/root/tmp/elgg.doxy'
+REFERENCE_CONF_FILE='/root/elgg-scripts/build/build.sh'
 
 GIT_REPO_URL="git://github.com/Elgg/Elgg.git"
 GIT_EXEC=$(which git)
-GIT_CLONE_PATH='/root/tmp/Elgg/'
+GIT_CLONE_PATH='/root/code/'
 
 
 ###################################
