@@ -4,7 +4,7 @@ build
 =====
 Scripts for building the an archive for distrubtion
 
-reference
+cron
 =========
-Scripts for creating documentation references
+Scripts for running periodic tasks
 

@@ -1,0 +1,80 @@
+#!/bin/bash
+# build API reference docs from source
+
+REFERENCE_OUTPUT_DIR='/var/www/reference.elgg.org/'
+REFERENCE_CONF_FILE='/root/tmp/elgg.doxy'
+
+GIT_REPO_URL="git://github.com/Elgg/Elgg.git"
+GIT_EXEC=$(which git)
+GIT_CLONE_PATH='/root/tmp/Elgg/'
+
+
+###################################
+# setup tmp directory
+TMP_DIR='/tmp/reference.elgg.org/'
+if [ -d ${TMP_DIR} ]; then
+	rm -rf ${TMP_DIR}
+fi
+
+mkdir -p ${TMP_DIR}
+
+
+###################################
+# setup git repository
+if [ -d ${GIT_CLONE_PATH} ]; then
+	rm -rf ${GIT_CLONE_PATH}
+fi
+
+${GIT_EXEC} clone ${GIT_REPO_URL} ${GIT_CLONE_PATH}
+
+
+########################################
+# git repo stable
+DOCS_DIR="${REFERENCE_OUTPUT_DIR}"
+
+# checkout the right branch
+cd ${GIT_CLONE_PATH}
+git checkout 1.7
+
+# Override some base conf from the doxy file.
+( cat ${REFERENCE_CONF_FILE};
+	echo "PROJECT_NUMBER=\"Version 1.7\"";
+	echo "OUTPUT_DIRECTORY=${TMP_DIR}";
+) | doxygen -
+
+if [ -d ${DOCS_DIR} ]; then
+	rm -rf ${DOCS_DIR}
+fi
+if [ ! -d ${DOCS_DIR} ]; then
+	mkdir -p ${DOCS_DIR}
+fi
+
+mv ${TMP_DIR}/html/* ${DOCS_DIR}
+
+
+##################################
+# branches
+ELGG_BRANCHES='1.5 1.6 1.7 1.8 master'
+
+for BRANCH in ${ELGG_BRANCHES}; do
+	DOCS_DIR="${REFERENCE_OUTPUT_DIR}${BRANCH}"
+
+	# checkout the right branch
+	cd ${GIT_CLONE_PATH}
+	git checkout ${BRANCH}
+
+	# Override some base conf from the doxy file.
+	( cat ${REFERENCE_CONF_FILE};
+		echo "PROJECT_NUMBER=\"Version ${BRANCH}\"";
+		echo "OUTPUT_DIRECTORY=${TMP_DIR}";
+	) | doxygen -
+
+	if [ -d ${DOCS_DIR} ]; then
+		rm -rf ${DOCS_DIR}
+	fi
+	if [ ! -d ${DOCS_DIR} ]; then
+		mkdir -p ${DOCS_DIR}
+	fi
+
+	mv ${TMP_DIR}/html/* ${DOCS_DIR}
+done
