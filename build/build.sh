@@ -106,8 +106,9 @@ prep_git() {
 		exit 1
 	fi
 	
-	# don't package the .git dir
+	# don't package the .git dir or .gitignore files
 	run_cmd "rm -rf ${GIT_CLONE_PATH}/.git*"
+	run_cmd "rm -rf ${GIT_CLONE_PATH}/.gitignore"
 	
 	if [ $? -gt 0 ]; then
 		echo "Could not remove the .git files!"
