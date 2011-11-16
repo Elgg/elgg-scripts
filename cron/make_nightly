@@ -4,7 +4,7 @@
 DOWNLOAD_DIR='/var/www/www.elgg.org/download/nightly'
 PACKAGE_SCRIPT='/root/elgg-scripts/build/build.sh'
 DATE=$(date +%Y%m%d)
-TARGETS='master 1.7'
+TARGETS='master 1.8 1.7'
 
 for TARGET in $TARGETS; do
 	OUTPUT_DIR="${DOWNLOAD_DIR}/${TARGET}"
