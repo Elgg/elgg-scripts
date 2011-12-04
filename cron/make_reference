@@ -34,11 +34,11 @@ DOCS_DIR="${REFERENCE_OUTPUT_DIR}"
 
 # checkout the right branch
 cd ${GIT_CLONE_PATH}
-git checkout 1.7
+git checkout 1.8
 
 # Override some base conf from the doxy file.
 ( cat ${REFERENCE_CONF_FILE};
-	echo "PROJECT_NUMBER=\"Version 1.7\"";
+	echo "PROJECT_NUMBER=\"Version 1.8\"";
 	echo "OUTPUT_DIRECTORY=${TMP_DIR}";
 	echo "INPUT=${GIT_CLONE_PATH}";
 	echo "STRIP_FROM_PATH=${GIT_CLONE_PATH}"
