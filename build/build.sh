@@ -175,7 +175,7 @@ usage() {
 	echo "Examples:"
 	echo "${0} master trunk-nightly"
 	echo "${0} 1.7 1.7-nightly"
-	echo "${0} 1.7.0 1.7.0 /var/www/downloads/releases/"
+	echo "${0} 1.7.0 1.7.0 /var/www/www.elgg.org/download/"
 
 	if [ ${#} -gt 0 ]; then
 		echo ""
