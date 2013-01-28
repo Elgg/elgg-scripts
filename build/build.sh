@@ -31,6 +31,13 @@ init() {
 	BRANCH=${1}
 	RELEASE=${2}
 
+	# is this an mit release
+	MIT=false
+	if [[ "$RELEASE" == *mit* ]]; then
+		echo "MIT release"
+		MIT=true
+	fi
+
 	# get output and tmp dirs
 	if [ ${#} -gt 2 ]; then
 		OUTPUT_DIR=$(echo "${3}" | sed 's/\/$//')
@@ -72,6 +79,7 @@ init() {
 	BASE_NAME="elgg-${RELEASE}"
 	TMP_DIR="${TMP_DIR}${DATE}/"
 	GIT_CLONE_PATH="${TMP_DIR}${BASE_NAME}"
+	RUN_DIR=`pwd`
 }
 
 cleanup() {
@@ -114,7 +122,19 @@ prep_git() {
 	if [ $? -gt 0 ]; then
 		echo "Could not remove the .git files!"
 		exit 1
-	fi	
+	fi
+
+	# MIT release handling
+	if [ $MIT ]; then
+		run_cmd "rm -f ${GIT_CLONE_PATH}/LICENSE.txt"
+		run_cmd "cp ${RUN_DIR}/MIT_LICENSE.txt ${GIT_CLONE_PATH}/LICENSE.txt"
+		run_cmd "rm -rf ${GIT_CLONE_PATH}/mod/*"
+
+		if [ $? -gt 0 ]; then
+			echo "Failed making the MIT release modifications"
+			exit 1
+		fi
+	fi
 }
 
 make_archives() {
