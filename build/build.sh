@@ -190,6 +190,7 @@ usage() {
 	echo ""
 	echo "Where <identifier> is the path of the GIT dir to export and"
 	echo "<version> is the version name for the archive."
+	echo "If <version> contains the letters mit, an MIT release is made."
 	echo ""
 	echo "Generates output_dir/elgg-version.zip"
 	echo ""
