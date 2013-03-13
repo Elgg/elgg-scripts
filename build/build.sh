@@ -125,7 +125,8 @@ prep_git() {
 	fi
 
 	# MIT release handling
-	if [ $MIT ]; then
+	if $MIT ; then
+		echo "Doing MIT preparations"
 		run_cmd "rm -f ${GIT_CLONE_PATH}/LICENSE.txt"
 		run_cmd "cp ${RUN_DIR}/MIT_LICENSE.txt ${GIT_CLONE_PATH}/LICENSE.txt"
 		run_cmd "rm -rf ${GIT_CLONE_PATH}/mod/*"
