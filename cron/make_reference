@@ -56,7 +56,7 @@ mv ${TMP_DIR}/html/* ${DOCS_DIR}
 
 ##################################
 # branches
-ELGG_BRANCHES='1.5 1.6 1.7 1.8 master'
+ELGG_BRANCHES='1.5 1.6 1.7 1.8 1.9 1.x master'
 
 for BRANCH in ${ELGG_BRANCHES}; do
 	DOCS_DIR="${REFERENCE_OUTPUT_DIR}${BRANCH}"
