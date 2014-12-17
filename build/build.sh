@@ -6,6 +6,7 @@ TMP_DIR="/tmp/"
 GIT_EXEC=$(which git)
 ZIP_EXEC=$(which zip)
 TAR_EXEC=$(which tar)
+COMPOSER_EXEC=$(which composer)
 
 PWD=`pwd`
 OUTPUT_DIR="${PWD}/"
@@ -72,6 +73,11 @@ init() {
 
 	if [ "${TAR_EXEC}" = "" ]; then
 		echo "Could not find a tar executable in the path!"
+		exit 1
+	fi
+
+        if [ "${COMPOSER_EXEC}" = "" ]; then
+		echo "Could not find a composer executable in the path!"
 		exit 1
 	fi
 
@@ -217,6 +223,24 @@ msg() {
 	fi
 }
 
+composer_install() {
+
+    if [ ! -f "${GIT_CLONE_PATH}/composer.json" ]; then
+        # composer.json doesn't exist
+        # no need to run composer, this is an older Elgg version
+        return 1
+    fi
+
+    msg "Installing vendors with composer..."
+
+    run_cmd 'composer install --no-dev'
+
+    if [ $? -gt 0 ]; then
+	echo "Could not complete composer install"
+	exit 1
+    fi
+}
+
 
 ########
 # Work #
@@ -225,6 +249,8 @@ msg() {
 init $@
 
 prep_git
+
+composer_install
 
 fix_perms
 
