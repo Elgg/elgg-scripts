@@ -233,7 +233,7 @@ composer_install() {
 
     msg "Installing vendors with composer..."
 
-    run_cmd 'composer install'
+    run_cmd 'composer install --no-dev'
 
     if [ $? -gt 0 ]; then
 	echo "Could not complete composer install"
