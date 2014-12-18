@@ -233,7 +233,7 @@ composer_install() {
 
     msg "Installing vendors with composer..."
 
-    run_cmd 'composer install --no-dev --ignore-platform-reqs'
+    run_cmd 'composer install --no-dev --ignore-platform-reqs --prefer-dist'
 
     if [ $? -gt 0 ]; then
 	echo "Could not complete composer install"
