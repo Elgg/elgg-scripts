@@ -34,11 +34,11 @@ DOCS_DIR="${REFERENCE_OUTPUT_DIR}"
 
 # checkout the right branch
 cd ${GIT_CLONE_PATH}
-git checkout 1.11
+git checkout 2.0
 
 # Override some base conf from the doxy file.
 ( cat ${REFERENCE_CONF_FILE};
-	echo "PROJECT_NUMBER=\"Version 1.11\"";
+	echo "PROJECT_NUMBER=\"Version 2.0\"";
 	echo "OUTPUT_DIRECTORY=${TMP_DIR}";
 	echo "INPUT=${GIT_CLONE_PATH}";
 	echo "STRIP_FROM_PATH=${GIT_CLONE_PATH}"
@@ -56,7 +56,7 @@ mv ${TMP_DIR}/html/* ${DOCS_DIR}
 
 ##################################
 # branches
-ELGG_BRANCHES='1.5 1.6 1.7 1.8 1.9 1.10 1.11 1.x master'
+ELGG_BRANCHES='1.5 1.6 1.7 1.8 1.9 1.10 1.11 1.12 2.0 2.x master'
 
 for BRANCH in ${ELGG_BRANCHES}; do
 	DOCS_DIR="${REFERENCE_OUTPUT_DIR}${BRANCH}"
