@@ -109,6 +109,16 @@ prep_git() {
 		echo "Check that the target exists and try again."
 		exit 1
 	fi
+
+	# don't package the .git dir or .gitignore files
+	run_cmd "rm -rf .git*"
+	run_cmd "rm -rf `find . -name .gitignore`"
+	run_cmd "rm -f .travis.yml"
+
+	if [ $? -gt 0 ]; then
+		echo "Could not remove the .git files!"
+		exit 1
+	fi
 }
 
 make_archives() {
