@@ -170,17 +170,18 @@ run_cmd() {
 
 # Show how to use this script
 usage() {
-	echo "Usage: ${0} <identifier> <version> [output_dir = './' [temp_dir = '/tmp']]"
+	echo "Usage: ${0} <starter-branch> <elgg-tag> [output_dir = './' [temp_dir = '/tmp']]"
 	echo ""
-	echo "Where <identifier> is the path of the GIT dir to export and"
-	echo "<version> is the version name for the archive."
+	echo "Where <starter-branch> is the branch of Elgg/starter-project to use"
+	echo "and <elgg-tag> is the tag of elgg/elgg to archive."
 	echo ""
 	echo "Generates output_dir/elgg-version.zip"
 	echo ""
 	echo "Examples:"
-	echo "${0} master 2.0.0-alpha.1"
-	echo "${0} master 2.1.5"
-	echo "${0} master 2.3.1 /var/www/www.elgg.org/download/"
+	echo "${0} master 2.0.5 /var/www/www.elgg.org/download/"
+	echo "${0} master 2.1.3 /var/www/www.elgg.org/download/"
+	echo ""
+	echo "WARNING: log in as 'deploy' before running this."
 
 	if [ ${#} -gt 0 ]; then
 		echo ""
@@ -201,6 +202,7 @@ msg() {
 
 composer_install() {
     msg "Installing vendors with composer..."
+    run_cmd "composer require --no-update elgg/elgg:${RELEASE}"
     run_cmd 'composer install --no-dev --ignore-platform-reqs --prefer-dist'
 
     if [ $? -gt 0 ]; then
