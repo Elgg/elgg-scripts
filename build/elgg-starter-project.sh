@@ -203,6 +203,10 @@ msg() {
 composer_install() {
     msg "Installing vendors with composer..."
     run_cmd "composer require --no-update elgg/elgg:${RELEASE}"
+    
+    # intentionally calling this twice. a composer bug causes the first run to fail to run
+    # the post-install scripts. The second call is needed to symlink the plugins in place.
+    run_cmd 'composer install --no-dev --ignore-platform-reqs --prefer-dist'
     run_cmd 'composer install --no-dev --ignore-platform-reqs --prefer-dist'
 
     if [ $? -gt 0 ]; then
