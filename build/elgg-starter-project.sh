@@ -206,8 +206,8 @@ composer_install() {
     
     # intentionally calling this twice. a composer bug causes the first run to fail to run
     # the post-install scripts. The second call is needed to symlink the plugins in place.
-    run_cmd 'composer install --no-dev --ignore-platform-reqs --prefer-dist'
-    run_cmd 'composer install --no-dev --ignore-platform-reqs --prefer-dist'
+    run_cmd 'composer install --no-dev --prefer-dist'
+    run_cmd 'composer install --no-dev --prefer-dist'
 
     if [ $? -gt 0 ]; then
         echo "Could not complete composer install"
