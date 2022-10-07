@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # takes a target and version number
-GIT_REPO_URL="git://github.com/Elgg/Elgg.git"
+GIT_REPO_URL="https://github.com/Elgg/Elgg.git"
 TMP_DIR="/tmp/"
 GIT_EXEC=$(which git)
 ZIP_EXEC=$(which zip)
